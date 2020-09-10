@@ -1,17 +1,15 @@
 from random import randint, shuffle
+
+
 def gerar_participantes_e_jogadas(quantidade_participante, numeros_a_serem_sorteados):
     pessoas = ['Miguel', 'Davi', 'Arthur', 'Pedro', 'Gabriel', 'Bernardo', 'Lucas', 'Matheus', 'Rafael', 'Heitor',
                'Sophia', 'Alice', 'Julia', 'Isabella', 'Manuela', 'Luiza', 'Valentina', 'Giovanna', 'Maria', 'Eduarda']
     shuffle(pessoas)
     participantes = {}
-    for pessoa in range(quantidade_participante):
-        if pessoa < len(pessoas):
-            participantes[pessoas[pessoa]] = gerar_lista_numeros_aleatorios(numeros_a_serem_sorteados)
     for jogador in range(quantidade_participante):
         if jogador < len(pessoas):
             participantes[pessoas[jogador]] = gerar_lista_numeros_aleatorios(numeros_a_serem_sorteados)
         else:
-            print(f'Máximo de {pessoa} pessoas atingido!')
             print(f'Máximo de {jogador} pessoas atingido!')
             break
     if quantidade_participante <= 0:
@@ -21,27 +19,25 @@ def gerar_participantes_e_jogadas(quantidade_participante, numeros_a_serem_sorte
 
 
 def gerar_lista_numeros_aleatorios(tamanho_lista):
-    minimo = 0
-    maximo = 60
     minimo = 1
     maximo = 20
     numeros = []
 
-    while len(numeros) < tamanho_lista:
     while len(numeros) - 1 < tamanho_lista:
         n_aleatorio = randint(minimo, maximo)
         if n_aleatorio not in numeros:
             numeros.append(n_aleatorio)
-        if len(numeros) == (maximo - minimo):
         if len(numeros) - 1 == (maximo - minimo):
             break
     return numeros
 
-@@ -38,28 +38,103 @@ def gerar_resultado(quantidade_de_numeros):
+
+def gerar_resultado(quantidade_de_numeros):
+    return gerar_lista_numeros_aleatorios(quantidade_de_numeros)
+
 
 def gerar_premiacao(participantes, resultado_final, premiacao):
     acertos = gerar_quantidade_acertos(participantes, resultado_final)
-    return acertos
     grupo_de_acertos = gerar_grupo_vencedores(acertos)
 
     premiados = {}
@@ -78,11 +74,8 @@ def gerar_quantidade_acertos(participantes, resultado_final):
     for nome, aposta in participantes.items():
         acertos = 0
         for numero in resultado_final:
-            if numero in aposta:
             if aposta.count(numero) != 0:
                 acertos += 1
-        resultados_contados[nome] = round(acertos / len(resultado_final), 2) * 100
-
         resultados_contados[nome] = acertos
     return resultados_contados
 
@@ -110,9 +103,6 @@ if __name__ == '__main__':
     print('Desenvolvedores: ', integrantes_do_grupo[0], ',', integrantes_do_grupo[1], ',', integrantes_do_grupo[2])
 
     jogadores = int(input('Quantidade de Pessoas: '))
-    qtd_numeros_sorteados = 12
-    todos_os_participantes = gerar_participantes_e_jogadas(jogadores, qtd_numeros_sorteados)
-    resultado = gerar_resultado(qtd_numeros_sorteados)
     QTD_NUMEROS_SORTEADOS = 12
     todos_os_participantes = gerar_participantes_e_jogadas(jogadores, QTD_NUMEROS_SORTEADOS)
     resultado = gerar_resultado(QTD_NUMEROS_SORTEADOS)
@@ -123,3 +113,29 @@ if __name__ == '__main__':
             print(f'Sr(a) {n} pelo prémio de R$ {p:.2f} reais!')
     else:
         print('Infelizmente ninguém ganhou.')
+
+    """
+    Complemento de recursos exigidos pelo professor que não tiveram funcionalidades no codio principal.
+    """
+    todos_participantes = list(todos_os_participantes.keys())
+    vencedorees = list(vencedores.keys())
+    for v in vencedorees:
+        try:
+            todos_participantes.pop(todos_participantes.index(v))
+        except:
+            pass
+    todos_participantes.sort()
+    todos_participantes.insert(0, integrantes_do_grupo)
+    todos_participantes.pop(0)
+
+    for nome in todos_participantes:
+        print('Parabens pela tentativa Sr(a)', nome, ', mais sorte na proxima vez!')
+
+    todos_participantes.extend(['\nObrigado por participarem!'])
+    print(todos_participantes[todos_participantes.index('\nObrigado por participarem!')])
+    print('Curiosidade, existem', todos_participantes.count('Maria'), 'Maria participando')
+    todos_participantes_2 = todos_participantes.copy()
+    todos_participantes_2.reverse()
+    todos_participantes_2.remove(todos_participantes[0])
+    todos_participantes_2.clear()
+© 2020 GitHub, Inc.
